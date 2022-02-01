@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Smart_Data.API</RootNamespace>
+    <UserSecretsId>ce1385fc-4679-4f87-ad8a-f37caa64a7be</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Smart-Data.Application\Smart-Data.Application.csproj" />
+    <ProjectReference Include="..\Smart-Data.Persistence\Smart-Data.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>

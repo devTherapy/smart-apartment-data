@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Smart_Data.Persistence</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NEST" Version="7.16.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Smart-Data.Application\Smart-Data.Application.csproj" />
+    <ProjectReference Include="..\Smart-Data.Domain\Smart-Data.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
