@@ -9,7 +9,7 @@ namespace Smart_Data.Persistence
 {
     public static class PersistenceRegistration
     {
-        public static void AddPersistence(this IServiceCollection service, IConfiguration configuration)
+        public static void RegisterPersistence(this IServiceCollection service, IConfiguration configuration)
         {
             service.AddScoped<IPropertySearchRepository, PropertySearchRepository>();
             service.AddScoped<IManagementSearchRepository, ManagementSearchRepository>();
