@@ -29,7 +29,7 @@ namespace Smart_Data.API
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Smart_Search.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Smart_Data.API", Version = "v1" });
             });
         }
 
