@@ -11,7 +11,7 @@ namespace Smart_Data.Application.Features.Query.GlobalSearch
 
             RuleFor(x => x.Market).ForEach(x => x.MaximumLength(256));
 
-            RuleFor(x => x.Size).GreaterThanOrEqualTo(10);
+            RuleFor(x => x.Size).GreaterThanOrEqualTo(10).LessThanOrEqualTo(50);
 
             RuleFor(x => x.PageNumber).GreaterThanOrEqualTo(1);
         }

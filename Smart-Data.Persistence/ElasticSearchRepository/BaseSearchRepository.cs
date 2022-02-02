@@ -45,19 +45,19 @@ namespace Smart_Data.Persistence.ElasticSearchRepository
         {
             var alias = Aliases.entities.ToString();
             //create management fields with boosts
-            var managementName = Infer.Field<Managements>(ff => ff.Management.Name, 4);
-            var managementState = Infer.Field<Managements>(ff => ff.Management.State, 2);
+            var managementName = Infer.Field<Managements>(ff => ff.Management.Name, 1.7);
+            var managementState = Infer.Field<Managements>(ff => ff.Management.State, 1.5);
             var managementMarket = Infer.Field<Managements>(ff => ff.Management.Market);
-            var managementExactName = Infer.Field<Managements>(ff => ff.Management.Name.Suffix("exact"), 5);
+            var managementExactName = Infer.Field<Managements>(ff => ff.Management.Name.Suffix("exact"), 1.8);
 
             //create property fields with boost
-            var propertyName = Infer.Field<Properties>(ff => ff.Property.Name, 4);
-            var propertyState = Infer.Field<Properties>(ff => ff.Property.State, 2);
-            var propertyMarket = Infer.Field<Properties>(ff => ff.Property.Market, 1);
-            var propertyFormerName = Infer.Field<Properties>(ff => ff.Property.FormerName, 3);
+            var propertyName = Infer.Field<Properties>(ff => ff.Property.Name, 1.7);
+            var propertyState = Infer.Field<Properties>(ff => ff.Property.State, 1.5);
+            var propertyMarket = Infer.Field<Properties>(ff => ff.Property.Market, 1.4);
+            var propertyFormerName = Infer.Field<Properties>(ff => ff.Property.FormerName, 1.6);
             var propertyCity = Infer.Field<Properties>(ff => ff.Property.City, 1.5);
-            var exactPropertyName = Infer.Field<Properties>(ff => ff.Property.Name.Suffix("exact"), 5);
-            var propertyStreetAddress = Infer.Field<Properties>(ff => ff.Property.StreetAddress, 1);
+            var exactPropertyName = Infer.Field<Properties>(ff => ff.Property.Name.Suffix("exact"), 1.8);
+            var propertyStreetAddress = Infer.Field<Properties>(ff => ff.Property.StreetAddress, 1.4);
          
             var searchResult = await _client.SearchAsync<object>(s =>
             s.Index(alias)
@@ -97,33 +97,41 @@ namespace Smart_Data.Persistence.ElasticSearchRepository
                             )
                 ))));
 
+            var xx = searchResult.DebugInformation;
+
             return new SearchResult { IsValid = searchResult.IsValid, TotalResults = searchResult.Total, Documents = searchResult.Documents};
         }
         protected IAnalysis CommonAnalyzer(AnalysisDescriptor analysis)
         {
-           return  analysis
-                .Tokenizers(t => t
-                    .EdgeNGram("autocomplete", ed => ed
-                        .MinGram(2)
-                        .MaxGram(20)
-                        .TokenChars(TokenChar.Letter)
-                                )
-                            )
-                .Analyzers(an => an
-                    .Custom(AutoCompleteAnalyzer, ca => ca
-                        .CharFilters("html_strip")
-                        .Tokenizer("autocomplete")
-                        .Filters("lowercase", "stop")
-                            )
-                    .Custom(KeywordAnalyzer, ca => ca
-                        .CharFilters("html_strip")
-                        .Tokenizer("keyword")
-                        .Filters("lowercase")
-                            )
-                    .Custom(SearchAnalyzer, ca => ca
-                        .Tokenizer("lowercase")
-                            )
-                            );
+            return analysis
+                 .Analyzers(an => an
+                     .Custom(AutoCompleteAnalyzer, ca => ca
+                         .CharFilters("html_strip")
+                         .Tokenizer("autocomplete")
+                         .Filters("lowercase", "stop", "eng_stopwords", "trim")
+                             )
+                     .Custom(KeywordAnalyzer, ca => ca
+                         .CharFilters("html_strip")
+                         .Tokenizer("keyword")
+                         .Filters("lowercase", "eng_stopwords", "trim")
+                             )
+                     .Custom(SearchAnalyzer, ca => ca
+                         .Filters("eng_stopwords", "trim")
+                         .Tokenizer("lowercase")
+                             )
+                             )
+                 .Tokenizers(t => t
+                     .EdgeNGram("autocomplete", ed => ed
+                         .MinGram(2)
+                         .MaxGram(20)
+                         .TokenChars(TokenChar.Letter)
+                                 )
+                             )
+                .TokenFilters(f => f
+                    .Stop("eng_stopwords", lang => lang
+                        .StopWords("_english_")
+                    )
+                );
         }
       
     }

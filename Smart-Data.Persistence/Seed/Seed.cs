@@ -4,6 +4,8 @@ using Smart_Data.Domain.Enums;
 using Smart_Data.Domain.Models;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+
 namespace Smart_Data.Persistence.Seed
 {
     public static class Seed
@@ -14,13 +16,19 @@ namespace Smart_Data.Persistence.Seed
             if (!await managementRepo.IndexExists(Indexes.managements))
             {
                 var managements = Deserialize<Managements>("mgmt.json");
-                await managementRepo.BulkAddAsync(managements, Indexes.managements);
+                if (managements.Any())
+                {
+                    await managementRepo.BulkAddAsync(managements, Indexes.managements);
+                }
             }
 
             if (!await propertyRepo.IndexExists(Indexes.properties))
             {
                 var properties = Deserialize<Properties>("properties.json");
-                await propertyRepo.BulkAddAsync(properties, Indexes.properties);
+                if (properties.Any())
+                {
+                    await propertyRepo.BulkAddAsync(properties, Indexes.properties);
+                }
             }
 
 
@@ -28,8 +36,8 @@ namespace Smart_Data.Persistence.Seed
 
         private static List<T> Deserialize<T>(string json)
         {
-            var path = Path.GetFullPath(@"../Smart-Data.Persistence/Seed/Json/" + json);
-            return File.ReadAllText(path).Deserialize<List<T>>();
+            var path = Path.GetFullPath(@"../Smart-Data.Persistence/Seed/" + json);
+            return File.Exists(path) ? File.ReadAllText(path).Deserialize<List<T>>() : new List<T>();
         }
     }
 }

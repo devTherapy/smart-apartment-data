@@ -13,12 +13,6 @@ namespace one_access.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly IHostEnvironment _env;
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="next"></param>
-        /// <param name="logger"></param>
-        /// <param name="env"></param>
         public ExceptionHandlerMiddleware(RequestDelegate next, IHostEnvironment env)
         {
             _next = next;
