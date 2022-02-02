@@ -97,8 +97,6 @@ namespace Smart_Data.Persistence.ElasticSearchRepository
                             )
                 ))));
 
-            var xx = searchResult.DebugInformation;
-
             return new SearchResult { IsValid = searchResult.IsValid, TotalResults = searchResult.Total, Documents = searchResult.Documents};
         }
         protected IAnalysis CommonAnalyzer(AnalysisDescriptor analysis)

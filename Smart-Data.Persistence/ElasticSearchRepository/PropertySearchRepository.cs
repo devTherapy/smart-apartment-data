@@ -65,7 +65,6 @@ namespace Smart_Data.Persistence.ElasticSearchRepository
                         )
                     )
                 );
-            var res = createIndexResponse.DebugInformation;
             return createIndexResponse.Index;
         }
 
